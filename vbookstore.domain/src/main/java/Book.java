@@ -1,11 +1,10 @@
-package com.hd.domain;
+package com.hd.vbookstore.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.util.ProxyUtils;
 
 import java.util.Date;
@@ -27,8 +26,18 @@ public class Book {
     private final String language;
     private final String ISBN;
     private final String author;
-    private final Date date;
+    private final Date publishDate;
     private final int count;
+
+
+
+    @Column(updatable = false)
+    @CreationTimestamp
+    private Date createdAt;
+
+    @Column
+    @UpdateTimestamp
+    private Date updatedAt;
 
     @Override
     public final boolean equals(Object o) {

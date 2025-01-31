@@ -1,8 +1,11 @@
-package com.hd.data;
+package com.hd.vbookstore.data;
 
-import com.hd.domain.User;
+import com.hd.vbookstore.domain.User;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+
+@Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);

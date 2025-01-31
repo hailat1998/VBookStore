@@ -1,4 +1,4 @@
-package com.hd.domain;
+package com.hd.vbookstore.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +18,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @RequiredArgsConstructor
+@Table(name = "`user`")
 public class User implements UserDetails {
 
     @Serial

@@ -1,20 +1,19 @@
-package vbookstore;
+package com.hd.app.vbookstore;
 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication()
-@ComponentScan(basePackages = {"com.hd.domain",
-"com.hd.data",
-"com.hd.web",
-"com.hd.restclient"})
+@EnableJpaRepositories(basePackages = "com.hd.vbookstore.data")
+@EntityScan(basePackages = {"com.hd.vbookstore.domain"})
+@ComponentScan(basePackages = { "com.hd" })
 public class VBookStoreApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(VBookStoreApplication.class);
     }
-
 }

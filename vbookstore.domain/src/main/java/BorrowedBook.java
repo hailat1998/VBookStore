@@ -1,9 +1,10 @@
-package com.hd.domain;
+package com.hd.vbookstore.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 
 import java.util.Date;
 
@@ -21,19 +22,19 @@ public class BorrowedBook {
     private final Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private final User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "book_id")
+    @ToString.Exclude
     private final Book book;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private final Date start_date;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private final Date end_date;
 
 
@@ -42,14 +43,13 @@ public class BorrowedBook {
 
 
     @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date updatedAt;
+
 }
 
 
