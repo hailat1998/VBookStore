@@ -16,7 +16,8 @@ dependencies {
     implementation(project(":vbookstore.domain"))
     implementation("org.springframework.boot:spring-boot-starter-data-rest:3.4.1")
     implementation("org.springframework.security:spring-security-core:6.4.2")
-
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.test {

@@ -123,7 +123,27 @@ public class DataLoader {
                                 "Leo Tolstoy",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
                                 3
-                             )
+                             ),
+                        new Book(
+                                null,
+                                "War and Peace - 2",
+                                "Historical Fiction",
+                                "Russian",
+                                "978-1400079988",
+                                "Leo Tolstoy",
+                                new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
+                                8
+                        ),
+                        new Book(
+                                null,
+                                "War and Peace - 3",
+                                "Historical Fiction",
+                                "Russian",
+                                "978-1400079988",
+                                "Leo Tolstoy",
+                                new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
+                                9
+                        )
                    );
 
 

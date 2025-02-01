@@ -1,8 +1,10 @@
 package com.hd.vbookstore.api;
 
 import com.hd.vbookstore.data.BookRepository;
+import com.hd.vbookstore.data.mapper.AuthorBookCountDTO;
 import com.hd.vbookstore.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -71,5 +75,42 @@ public class BookController {
     @PostMapping(consumes="application/json")
     public Book postBook(@RequestBody Book book) {
         return bookRepository.save(book);
+    }
+
+
+    @GetMapping("/search")
+    ResponseEntity<Page<Book>> search(@RequestParam String searchTerm,  @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
+        try {
+            Sort.Direction sortDirection = Sort.Direction.ASC ;
+            PageRequest pageRequest = PageRequest.of(
+                     pageNumber ,
+                    10,
+                    Sort.by(sortDirection, "createdAt")
+            );
+
+            Page<Book> books = bookRepository.searchBooks(searchTerm, pageRequest);
+
+
+            return ResponseEntity.ok(books);
+
+        } catch(IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid pagination parameters",
+                    e
+            );
+        }
+    }
+
+    @GetMapping("/countByAuthor")
+    ResponseEntity<?> countByAuthor(@RequestParam(name = "author", required = false) String author) {
+        if (author == null || author.isEmpty()) {
+            List<AuthorBookCountDTO> counts = bookRepository.getAllAuthorsBookCounts();
+            return ResponseEntity.ok(counts);
+        } else {
+            Long count = bookRepository.countBooksByAuthor(author);
+            List<AuthorBookCountDTO> result = List.of(new AuthorBookCountDTO(author, count));
+            return ResponseEntity.ok(result);
+        }
     }
 }
