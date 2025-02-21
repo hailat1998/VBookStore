@@ -1,11 +1,13 @@
 package com.hd.vbookstore.domain;
 
+import com.hd.vbookstore.domain.enums.BorrowStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -14,7 +16,7 @@ import java.util.Date;
 @ToString
 @RequiredArgsConstructor
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-public class BorrowedBook {
+public class BorrowedBook implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,7 +39,6 @@ public class BorrowedBook {
     @Column(nullable = false)
     private final Date end_date;
 
-
     @Enumerated(EnumType.STRING)
     private BorrowStatus status;
 
@@ -50,12 +51,21 @@ public class BorrowedBook {
     @UpdateTimestamp
     private Date updatedAt;
 
+
+    public void setStatus(BorrowStatus status) {
+        this.status = switch (status) {
+            case BORROWED -> BorrowStatus.BORROWED;
+
+            case RETURNED -> BorrowStatus.RETURNED ;
+
+            case LOST -> BorrowStatus.LOST;
+
+            case OVERDUE -> BorrowStatus.OVERDUE ;
+
+        };
+    }
+
 }
 
 
- enum BorrowStatus {
-    BORROWED,
-    RETURNED,
-    OVERDUE,
-    LOST
-}
+

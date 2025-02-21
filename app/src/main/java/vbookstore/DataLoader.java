@@ -32,7 +32,10 @@ public class DataLoader {
                                 "978-0743273565",
                                 "F. Scott Fitzgerald",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1925-04-10"),
-                                5
+                                5,
+                                30.4f,
+                                null,
+                                null
                         ),
                         new Book(
                                 null,
@@ -42,7 +45,10 @@ public class DataLoader {
                                 "978-0451524935",
                                 "George Orwell",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1949-06-08"),
-                                3
+                                3,
+                                43.0f,
+                                null,
+                                null
                         ),
                         new Book(
                                 null,
@@ -52,7 +58,10 @@ public class DataLoader {
                                 "978-0141439518",
                                 "Jane Austen",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1813-01-28"),
-                                4
+                                4,
+                                54.3f,
+                                null,
+                                null
                         ),
                         new Book(
                                 null,
@@ -62,7 +71,10 @@ public class DataLoader {
                                 "978-0060883287",
                                 "Gabriel García Márquez",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1967-05-30"),
-                                2
+                                2,
+                                65.0f,
+                                null,
+                                null
                         ),
                         new Book(
                                 null,
@@ -72,7 +84,10 @@ public class DataLoader {
                                 "978-0547928227",
                                 "J.R.R. Tolkien",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1937-09-21"),
-                                6
+                                6,
+                                43.9f,
+                                null,
+                                null
                            ),
                         new Book(
                                 null,
@@ -82,7 +97,10 @@ public class DataLoader {
                                 "978-0143107637",
                                 "Fyodor Dostoevsky",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1866-01-01"),
-                                3
+                                3,
+                                54.9f,
+                                null,
+                                null
                             ),
                         new Book(
                                 null,
@@ -92,7 +110,10 @@ public class DataLoader {
                                 "978-0316769488",
                                 "J.D. Salinger",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1951-07-16"),
-                                4
+                                4,
+                                32.9f,
+                                null,
+                                null
                             ),
                         new Book(
                                 null,
@@ -102,7 +123,10 @@ public class DataLoader {
                                 "978-0142437230",
                                 "Miguel de Cervantes",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1605-01-16"),
-                                2
+                                2,
+                                65.0f,
+                                null,
+                                null
                             ),
                         new Book(
                                 null,
@@ -112,7 +136,10 @@ public class DataLoader {
                                 "978-0142437223",
                                 "Dante Alighieri",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1320-01-01"),
-                                1
+                                1,
+                                23.0f,
+                                null,
+                                null
                            ),
                         new Book(
                                 null,
@@ -122,7 +149,10 @@ public class DataLoader {
                                 "978-1400079988",
                                 "Leo Tolstoy",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
-                                3
+                                3,
+                                84.0f,
+                                null,
+                                null
                              ),
                         new Book(
                                 null,
@@ -132,7 +162,10 @@ public class DataLoader {
                                 "978-1400079988",
                                 "Leo Tolstoy",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
-                                8
+                                8,
+                                23.0f,
+                                null,
+                                null
                         ),
                         new Book(
                                 null,
@@ -142,7 +175,10 @@ public class DataLoader {
                                 "978-1400079988",
                                 "Leo Tolstoy",
                                 new SimpleDateFormat("yyyy-MM-dd").parse("1869-01-01"),
-                                9
+                                9,
+                                12.0f,
+                                null,
+                                null
                         )
                    );
 

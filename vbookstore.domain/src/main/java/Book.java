@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.util.ProxyUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -14,22 +15,22 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-public class Book {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Book implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private final Long id;
-    private final String title;
-    private final String genre;
-    private final String language;
-    private final String ISBN;
-    private final String author;
-    private final Date publishDate;
-    private final int count;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-
+    private String title;
+    private String genre;
+    private String language;
+    private String ISBN;
+    private String author;
+    private Date publishDate;
+    private int count;
+    private float price;
 
     @Column(updatable = false)
     @CreationTimestamp

@@ -19,8 +19,8 @@ dependencies {
     implementation(project(":vbookstore.domain"))
     implementation(project(":vbookstore.data"))
     implementation(project(":vbookstore.api"))
-    implementation(project(":vbookstore.restclient"))
     implementation("org.springframework.data:spring-data-jpa:3.4.2")
+    implementation("org.springframework.security:spring-security-core:6.4.2")
 }
 
 tasks.test {

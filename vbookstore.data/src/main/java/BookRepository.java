@@ -1,6 +1,6 @@
 package com.hd.vbookstore.data;
 
-import com.hd.vbookstore.data.mapper.AuthorBookCountDTO;
+import com.hd.vbookstore.commons.AuthorBookCountDTO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +56,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT COUNT(b) FROM Book b WHERE b.author = :author")
     Long countBooksByAuthor(@Param("author") String author);
 
-    @Query("SELECT new com.hd.vbookstore.data.mapper.AuthorBookCountDTO(b.author, COUNT(b)) FROM Book b GROUP BY b.author ORDER BY COUNT(b) DESC")
+    @Query("SELECT new com.hd.vbookstore.commons.AuthorBookCountDTO(b.author, COUNT(b)) FROM Book b GROUP BY b.author ORDER BY COUNT(b) DESC")
     List<AuthorBookCountDTO> getAllAuthorsBookCounts();
+
+
+
 
     @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
             "OR LOWER(b.author) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
@@ -75,5 +77,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Override
     long count();
+
 }
 

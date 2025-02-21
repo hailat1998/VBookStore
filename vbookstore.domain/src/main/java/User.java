@@ -1,5 +1,7 @@
 package com.hd.vbookstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hd.vbookstore.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.util.ProxyUtils;
@@ -8,18 +10,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @RequiredArgsConstructor
 @Table(name = "`user`")
-public class User implements UserDetails {
+public class User implements UserDetails , Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -38,7 +39,22 @@ public class User implements UserDetails {
     private final String state;
     private final String zip;
     private final String phoneNumber;
+    private final String email;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private final Set<Role> roles = new HashSet<>();
+
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+    }
 
     @Override
     public boolean isCredentialsNonExpired() {
@@ -61,9 +77,13 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public final boolean equals(Object o) {

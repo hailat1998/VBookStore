@@ -1,0 +1,37 @@
+package com.hd.vbookstore.api;
+
+
+import com.hd.vbookstore.commons.BorrowDto;
+import com.hd.vbookstore.commons.UpdateBorrowDto;
+import com.hd.vbookstore.core.services.BorrowedBookService;
+import com.hd.vbookstore.domain.BorrowedBook;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping(path = "/api/borrow", consumes = "application/json")
+public class BorrowController {
+
+    BorrowedBookService borrowedBookService;
+
+    public BorrowController(
+            BorrowedBookService borrowedBookService
+    ) {
+        this.borrowedBookService = borrowedBookService;
+    }
+
+    @PostMapping(path = "/set")
+    public Optional<BorrowedBook> setBorrow(
+            @RequestBody BorrowDto borrowDto
+           ) {
+        return Optional.ofNullable(borrowedBookService.setBorrow(borrowDto.getBook_id(), borrowDto.getStart_date(), borrowDto.getEnd_date()));
+        }
+
+    @PostMapping("/update")
+    public BorrowedBook updateBorrow(@RequestBody UpdateBorrowDto updateBorrowDto) {
+        return borrowedBookService.updateBorrow(updateBorrowDto.getBorrow_id(), updateBorrowDto.getStatus());
+    }
+}
