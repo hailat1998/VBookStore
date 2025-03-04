@@ -4,7 +4,6 @@ import com.hd.vbookstore.commons.*;
 import com.hd.vbookstore.commons.exceptions.TokenRefreshException;
 import com.hd.vbookstore.core.services.AuthenticationService;
 import com.hd.vbookstore.core.services.TokenService;
-import com.hd.vbookstore.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<UserDto> signup(@RequestBody RegisterUserDto registerUserDto) {
      return ResponseEntity.ok(authenticationService.signup(registerUserDto));
     }
 
@@ -74,5 +73,6 @@ public class AuthController {
             @AuthenticationPrincipal UserDetails userDetails) {
         tokenService.revokeRefreshToken(userDetails.getUsername());
         return ResponseEntity.ok().build();
+
     }
 }

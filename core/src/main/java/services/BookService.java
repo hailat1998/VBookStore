@@ -2,9 +2,11 @@ package com.hd.vbookstore.core.services;
 
 
 import com.hd.vbookstore.commons.BookDto;
+import com.hd.vbookstore.core.utils.BookMapper;
 import com.hd.vbookstore.data.BookRepository;
 import com.hd.vbookstore.commons.AuthorBookCountDTO;
 import com.hd.vbookstore.domain.Book;
+import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,13 +20,19 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
+    private final BookMapper bookMapper;
 
-    BookService(BookRepository bookRepository) {
+    BookService(BookRepository bookRepository,
+                ModelMapper modelMapper,
+                BookMapper bookMapper) {
         this.bookRepository = bookRepository ;
+        this.modelMapper = modelMapper;
+        this.bookMapper = bookMapper;
     }
 
     @Cacheable(value = "booksCache", key = "'page:' + #pageNumber + ':size:' + #pageSize")
-    public Page<Book> getBooks(int pageNumber, int pageSize, String sortBy, String direction) {
+    public Page<BookDto> getBooks(int pageNumber, int pageSize, String sortBy, String direction) {
         if (pageSize > 100) {
             pageSize = 100;
         }
@@ -38,7 +46,7 @@ public class BookService {
                 Sort.by(sortDirection, sortBy)
         );
 
-      return  bookRepository.findAll(pageRequest);
+      return bookRepository.findAll(pageRequest).map((element) -> modelMapper.map(element, BookDto.class));
     }
 
     @Cacheable(value = "bookCache", key = "#id")
@@ -46,7 +54,7 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
-    public Book save(BookDto bookDto) {
+    public BookDto save(BookDto bookDto) {
         Book book = new Book(
                 null,
                 bookDto.getTitle(),
@@ -61,11 +69,11 @@ public class BookService {
                 null
              );
 
-        return bookRepository.save(book);
+        return bookMapper.bookDtoFromBook(bookRepository.save(book));
     }
 
     @Cacheable(value = "searchCache", key = "'searchTerm:' + #searchTerm + 'pageNumber:' + #pageNumber")
-    public Page<Book> search(String searchTerm, int pageNumber) {
+    public Page<BookDto> search(String searchTerm, int pageNumber) {
         Sort.Direction sortDirection = Sort.Direction.ASC ;
         PageRequest pageRequest = PageRequest.of(
                 pageNumber ,
@@ -73,7 +81,7 @@ public class BookService {
                 Sort.by(sortDirection, "createdAt")
         );
 
-        return bookRepository.searchBooks(searchTerm, pageRequest);
+        return bookRepository.searchBooks(searchTerm, pageRequest).map((element) -> modelMapper.map(element, BookDto.class));
     }
 
     @Cacheable(value = "authorsCache", key = "'allAuthors'")

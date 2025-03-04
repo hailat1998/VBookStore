@@ -13,6 +13,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class BookDto {
 
+
+    private Long id;
     private String title;
     private String genre;
     private String language;
@@ -21,6 +23,5 @@ public class BookDto {
     private Date publishDate;
     private int count;
     private float price;
-
 
 }

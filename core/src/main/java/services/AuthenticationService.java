@@ -2,9 +2,11 @@ package com.hd.vbookstore.core.services;
 
 import com.hd.vbookstore.commons.LoginUserDto;
 import com.hd.vbookstore.commons.RegisterUserDto;
+import com.hd.vbookstore.commons.UserDto;
 import com.hd.vbookstore.data.UserRepository;
 import com.hd.vbookstore.domain.enums.Role;
 import com.hd.vbookstore.domain.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,18 +28,20 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder,
+            ModelMapper modelMapper) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
-    public User signup(RegisterUserDto input) {
+    public UserDto signup(RegisterUserDto input) {
 
         User user = new User(input.getUsername(),
                 passwordEncoder.encode(input.getPassword()),
@@ -49,7 +53,7 @@ public class AuthenticationService {
 
         user.addRole(Role.ROLE_USER);
 
-        return userRepository.save(user);
+        return modelMapper.map(userRepository.save(user), UserDto.class);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

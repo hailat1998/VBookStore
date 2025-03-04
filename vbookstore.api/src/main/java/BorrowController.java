@@ -2,11 +2,11 @@ package com.hd.vbookstore.api;
 
 
 import com.hd.vbookstore.commons.BorrowDto;
+import com.hd.vbookstore.commons.BorrowedBookResponseDto;
 import com.hd.vbookstore.commons.UpdateBorrowDto;
 import com.hd.vbookstore.core.services.BorrowedBookService;
+import com.hd.vbookstore.core.utils.BorrowedBookMapper;
 import com.hd.vbookstore.domain.BorrowedBook;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class BorrowController {
 
     BorrowedBookService borrowedBookService;
+
 
     public BorrowController(
             BorrowedBookService borrowedBookService
@@ -31,7 +32,7 @@ public class BorrowController {
         }
 
     @PostMapping("/update")
-    public BorrowedBook updateBorrow(@RequestBody UpdateBorrowDto updateBorrowDto) {
+    public BorrowedBookResponseDto updateBorrow(@RequestBody UpdateBorrowDto updateBorrowDto) {
         return borrowedBookService.updateBorrow(updateBorrowDto.getBorrow_id(), updateBorrowDto.getStatus());
     }
 }

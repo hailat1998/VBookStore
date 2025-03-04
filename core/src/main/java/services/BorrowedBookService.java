@@ -1,7 +1,8 @@
 package com.hd.vbookstore.core.services;
 
-
+import com.hd.vbookstore.commons.BorrowedBookResponseDto;
 import com.hd.vbookstore.commons.exceptions.NoDataFoundException;
+import com.hd.vbookstore.core.utils.BorrowedBookMapper;
 import com.hd.vbookstore.data.BookRepository;
 import com.hd.vbookstore.data.BorrowedBookRepository;
 import com.hd.vbookstore.data.UserRepository;
@@ -23,23 +24,24 @@ public class BorrowedBookService {
     private final BorrowedBookRepository borrowedBookRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    BorrowedBookMapper borrowedBookMapper;
 
     public BorrowedBookService(
             BorrowedBookRepository borrowedBookRepository,
             BookRepository bookRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            BorrowedBookMapper borrowedBookMapper
            ) {
         this.borrowedBookRepository = borrowedBookRepository;
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.borrowedBookMapper = borrowedBookMapper;
     }
 
-    public BorrowedBook setBorrow(Long bookId, Date startDate, Date endDate) {
+    public BorrowedBookResponseDto setBorrow(Long bookId, Date startDate, Date endDate) {
 
-        // Retrieve the current authenticated user from SecurityContextHolder
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Fetch book and user from the repository
         Optional<Book> book = bookRepository.getBookById(bookId);
         Optional<User> user = userRepository.findByUsername(currentUsername);
 
@@ -75,17 +77,16 @@ public class BorrowedBookService {
                 null
         ));
 
-        return borrowedBookRepository.save(borrowedBook);
+        return borrowedBookMapper.toDto(borrowedBookRepository.save(borrowedBook));
     }
 
-    public BorrowedBook updateBorrow(Long borrow_id, BorrowStatus status) {
+    public BorrowedBookResponseDto updateBorrow(Long borrow_id, BorrowStatus status) {
         Optional<BorrowedBook> borrowedBook = borrowedBookRepository.getBorrowById(borrow_id);
         if (borrowedBook.isEmpty()) {
             throw new NoDataFoundException("No active Books found");
         }
         borrowedBook.get().setStatus(status);
 
-        return borrowedBookRepository.save(borrowedBook.get());
+        return borrowedBookMapper.toDto(borrowedBookRepository.save(borrowedBook.get()));
     }
-
 }

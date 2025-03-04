@@ -27,7 +27,7 @@ public class BookController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<Book>> getBooks(
+    public ResponseEntity<Page<BookDto>> getBooks(
             @RequestParam(name = "page", defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", defaultValue = "20") int pageSize,
             @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
@@ -39,7 +39,7 @@ public class BookController {
                 pageSize = 100;
             }
 
-        Page<Book> books = bookService.getBooks(pageNumber, pageSize, sortBy, direction );
+        Page<BookDto> books = bookService.getBooks(pageNumber, pageSize, sortBy, direction );
 
             return ResponseEntity.ok(books);
 
@@ -60,16 +60,16 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/save", consumes="application/json")
-    public Book postBook(@RequestBody BookDto book) {
+    public BookDto postBook(@RequestBody BookDto book) {
         return bookService.save(book);
     }
 
 
     @GetMapping("/search")
-    ResponseEntity<Page<Book>> search(@RequestParam String searchTerm,  @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
+    ResponseEntity<Page<BookDto>> search(@RequestParam String searchTerm, @RequestParam(name = "page", defaultValue = "0") int pageNumber) {
         try {
 
-            Page<Book> books = bookService.search(searchTerm, pageNumber);
+            Page<BookDto> books = bookService.search(searchTerm, pageNumber);
 
             return ResponseEntity.ok(books);
 

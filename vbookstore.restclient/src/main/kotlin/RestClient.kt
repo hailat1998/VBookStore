@@ -2,7 +2,7 @@ package com.hd.vbookstore.restclient
 
 import com.hd.vbookstore.commons.*
 import com.hd.vbookstore.domain.Book
-import com.hd.vbookstore.domain.User
+import com.hd.vbookstore.domain.BorrowedBook
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.core.ParameterizedTypeReference
@@ -20,8 +20,8 @@ class RestClient {
 
     private val rest = RestTemplate()
 
-    suspend fun register(userRequest: RequestEntity<RegisterUserDto>): ResponseEntity<User> {
-        return rest.exchange(userRequest, User::class.java)
+    suspend fun register(userRequest: RequestEntity<RegisterUserDto>): ResponseEntity<UserDto> {
+        return rest.exchange(userRequest, UserDto::class.java)
     }
 
     suspend fun login(loginRequestEntity: RequestEntity<LoginUserDto>) : ResponseEntity<TokenResponse> {
@@ -57,7 +57,7 @@ class RestClient {
             rest.exchange(uri, HttpMethod.POST, book)
         }
 
-    suspend fun searchBook(uri: String, searchTerm: String, page: Int = 0, size: Int = 10): ResponseEntity<RestPageImpl<Book>> =
+    suspend fun searchBook(uri: String, searchTerm: String, page: Int = 0, size: Int = 10): ResponseEntity<RestPageImpl<BookDto>> =
         withContext(Dispatchers.IO) {
             val uri = URI(uri)
             val builder = UriComponentsBuilder.fromUri(uri)
@@ -67,7 +67,7 @@ class RestClient {
                 .build()
                 .toUri()
 
-            val responseType = object : ParameterizedTypeReference<RestPageImpl<Book>>() {}
+            val responseType = object : ParameterizedTypeReference<RestPageImpl<BookDto>>() {}
 
             rest.exchange(
                 builder,
@@ -93,19 +93,32 @@ class RestClient {
                 responseType
             )
         }
+
     suspend fun countByAuthors(uri: String): ResponseEntity<List<AuthorBookCountDTO>> =
         withContext(Dispatchers.IO) {
-            val uriBuilder = UriComponentsBuilder.fromUriString(uri)
-                .build()
-                .toUri()
 
             val responseType = object : ParameterizedTypeReference<List<AuthorBookCountDTO>>() {}
 
             rest.exchange(
-                uriBuilder,
+                toUri(uri),
                 HttpMethod.GET,
                 null,
                 responseType
             )
         }
+
+    suspend fun setBorrow(requestEntity: RequestEntity<BorrowDto>): ResponseEntity<BorrowedBookResponseDto?> {
+        return rest.exchange(requestEntity, BorrowedBookResponseDto::class.java)
+    }
+
+    suspend fun updateBorrow(requestEntity: RequestEntity<UpdateBorrowDto>): ResponseEntity<BorrowedBookResponseDto> {
+        return rest.exchange(requestEntity, BorrowedBookResponseDto::class.java)
+    }
+
+    private fun toUri(uri: String): URI {
+        return  UriComponentsBuilder.fromUriString(uri)
+            .build()
+            .toUri()
+    }
+
 }
