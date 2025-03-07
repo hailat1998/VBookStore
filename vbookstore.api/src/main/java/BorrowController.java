@@ -5,8 +5,6 @@ import com.hd.vbookstore.commons.BorrowDto;
 import com.hd.vbookstore.commons.BorrowedBookResponseDto;
 import com.hd.vbookstore.commons.UpdateBorrowDto;
 import com.hd.vbookstore.core.services.BorrowedBookService;
-import com.hd.vbookstore.core.utils.BorrowedBookMapper;
-import com.hd.vbookstore.domain.BorrowedBook;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,7 +23,7 @@ public class BorrowController {
     }
 
     @PostMapping(path = "/set")
-    public Optional<BorrowedBook> setBorrow(
+    public Optional<BorrowedBookResponseDto> setBorrow(
             @RequestBody BorrowDto borrowDto
            ) {
         return Optional.ofNullable(borrowedBookService.setBorrow(borrowDto.getBook_id(), borrowDto.getStart_date(), borrowDto.getEnd_date()));

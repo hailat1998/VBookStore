@@ -4,15 +4,19 @@ import com.hd.vbookstore.commons.BorrowedBookResponseDto;
 import com.hd.vbookstore.domain.BorrowedBook;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+
+@Component
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BorrowedBookMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.fullname", target = "userName")
+    @Mapping(source = "user.username", target = "userName")
     @Mapping(source = "book.id", target = "bookId")
     @Mapping(source = "book.title", target = "bookTitle")
     @Mapping(source = "start_date", target = "startDate")
@@ -29,7 +33,6 @@ public interface BorrowedBookMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     BorrowedBook toEntity(BorrowedBookResponseDto dto);
-
 
     List<BorrowedBookResponseDto> toDtoList(List<BorrowedBook> borrowedBooks);
     List<BorrowedBook> toEntityList(List<BorrowedBookResponseDto> dtos);

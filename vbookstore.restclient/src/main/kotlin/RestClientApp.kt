@@ -137,6 +137,7 @@ class BookCommandLineRunner(
              }
 
             executeSaveBookOperations(userToken, adminToken)
+            executeBookBorrowOperations(userToken, adminToken)
     }
 
     private suspend fun executeSaveBookOperations(
@@ -167,7 +168,7 @@ class BookCommandLineRunner(
     }
 
 
-    private suspend fun executeBorrowOperations(
+    private suspend fun executeBookBorrowOperations(
         userToken: TokenResponse?,
         adminToken: TokenResponse?
     ) {
@@ -177,7 +178,6 @@ class BookCommandLineRunner(
 
        val updateBorrow = updateBorrow(userToken)
         logger.info("User update borrow: ${updateBorrow.getOrNull()}")
-
     }
 
     private suspend fun setBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto> {

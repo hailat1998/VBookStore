@@ -24,7 +24,7 @@ public class BorrowedBookService {
     private final BorrowedBookRepository borrowedBookRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    BorrowedBookMapper borrowedBookMapper;
+    private final BorrowedBookMapper borrowedBookMapper;
 
     public BorrowedBookService(
             BorrowedBookRepository borrowedBookRepository,

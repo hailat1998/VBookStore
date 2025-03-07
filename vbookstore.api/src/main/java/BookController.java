@@ -3,7 +3,6 @@ package com.hd.vbookstore.api;
 import com.hd.vbookstore.commons.BookDto;
 import com.hd.vbookstore.core.services.BookService;
 import com.hd.vbookstore.commons.AuthorBookCountDTO;
-import com.hd.vbookstore.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -53,7 +52,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Book> getById(@PathVariable Long id) {
+    public Optional<BookDto> getById(@PathVariable Long id) {
         return bookService.getById(id);
     }
 

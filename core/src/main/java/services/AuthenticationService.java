@@ -3,10 +3,10 @@ package com.hd.vbookstore.core.services;
 import com.hd.vbookstore.commons.LoginUserDto;
 import com.hd.vbookstore.commons.RegisterUserDto;
 import com.hd.vbookstore.commons.UserDto;
+import com.hd.vbookstore.core.utils.UserMapper;
 import com.hd.vbookstore.data.UserRepository;
 import com.hd.vbookstore.domain.enums.Role;
 import com.hd.vbookstore.domain.User;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,17 +28,17 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
-    private final ModelMapper modelMapper;
+   private final UserMapper userMapper;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            ModelMapper modelMapper) {
+           UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
+        this.userMapper = userMapper;
     }
 
     public UserDto signup(RegisterUserDto input) {
@@ -53,16 +53,16 @@ public class AuthenticationService {
 
         user.addRole(Role.ROLE_USER);
 
-        return modelMapper.map(userRepository.save(user), UserDto.class);
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public User createAdminUser(User user) {
+    public UserDto createAdminUser(User user) {
         Set<Role> roles = new HashSet<>();
         roles.add(Role.ROLE_ADMIN);
         roles.add(Role.ROLE_USER);
         user.getRoles().addAll(roles);
-        return userRepository.save(user);
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

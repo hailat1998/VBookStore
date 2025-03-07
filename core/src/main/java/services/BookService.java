@@ -20,14 +20,13 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final ModelMapper modelMapper;
     private final BookMapper bookMapper;
 
+
     BookService(BookRepository bookRepository,
-                ModelMapper modelMapper,
-                BookMapper bookMapper) {
+               BookMapper bookMapper
+               ) {
         this.bookRepository = bookRepository ;
-        this.modelMapper = modelMapper;
         this.bookMapper = bookMapper;
     }
 
@@ -46,12 +45,12 @@ public class BookService {
                 Sort.by(sortDirection, sortBy)
         );
 
-      return bookRepository.findAll(pageRequest).map((element) -> modelMapper.map(element, BookDto.class));
+      return bookRepository.findAll(pageRequest).map(bookMapper::bookDtoFromBook);
     }
 
     @Cacheable(value = "bookCache", key = "#id")
-    public Optional<Book> getById(Long id) {
-        return bookRepository.findById(id);
+    public Optional<BookDto> getById(Long id) {
+        return bookRepository.findById(id).map(bookMapper::bookDtoFromBook);
     }
 
     public BookDto save(BookDto bookDto) {
@@ -81,7 +80,7 @@ public class BookService {
                 Sort.by(sortDirection, "createdAt")
         );
 
-        return bookRepository.searchBooks(searchTerm, pageRequest).map((element) -> modelMapper.map(element, BookDto.class));
+        return bookRepository.searchBooks(searchTerm, pageRequest).map(bookMapper::bookDtoFromBook);
     }
 
     @Cacheable(value = "authorsCache", key = "'allAuthors'")
