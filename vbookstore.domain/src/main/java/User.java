@@ -18,10 +18,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // Changed from PRIVATE to PROTECTED
 @Table(name = "`user`")
-public class User implements UserDetails , Serializable {
+public class User implements UserDetails, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,22 +30,35 @@ public class User implements UserDetails , Serializable {
     @Column(nullable = false)
     private Long id;
 
-    private final String username;
-
-    private final String password;
-    private final String fullname;
-    private final String street;
-    private final String city;
-    private final String state;
-    private final String zip;
-    private final String phoneNumber;
-    private final String email;
+    private String username;
+    private String password;
+    private String fullname;
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+    private String phoneNumber;
+    private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private final Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
+
+    // Add an all-args constructor
+    public User(String username, String password, String fullname, String street,
+                String city, String state, String zip, String phoneNumber, String email) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
 
 
     public void addRole(Role role) {
@@ -84,7 +96,6 @@ public class User implements UserDetails , Serializable {
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public final boolean equals(Object o) {

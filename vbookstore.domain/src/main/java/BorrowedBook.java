@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,34 +13,33 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BorrowedBook implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
-    private final Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
-    private final User user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     @ToString.Exclude
-    private final Book book;
+    private Book book;
 
     @Column(nullable = false)
-    private final Date start_date;
+    private Date start_date;
 
     @Column(nullable = false)
-    private final Date end_date;
+    private Date end_date;
 
+    @Setter
     @Enumerated(EnumType.STRING)
-    private BorrowStatus status;
-
+    private BorrowStatus status = BorrowStatus.BORROWED; // Default status
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -52,17 +50,11 @@ public class BorrowedBook implements Serializable {
     private Date updatedAt;
 
 
-    public void setStatus(BorrowStatus status) {
-        this.status = switch (status) {
-            case BORROWED -> BorrowStatus.BORROWED;
-
-            case RETURNED -> BorrowStatus.RETURNED ;
-
-            case LOST -> BorrowStatus.LOST;
-
-            case OVERDUE -> BorrowStatus.OVERDUE ;
-
-        };
+    public BorrowedBook(User user, Book book, Date start_date, Date end_date) {
+        this.user = user;
+        this.book = book;
+        this.start_date = start_date;
+        this.end_date = end_date;
     }
 
 }

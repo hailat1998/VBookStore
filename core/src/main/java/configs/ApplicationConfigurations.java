@@ -1,9 +1,6 @@
 package com.hd.vbookstore.core.configs;
 
-import com.hd.vbookstore.commons.BookDto;
-import com.hd.vbookstore.core.utils.BookMapper;
 import com.hd.vbookstore.data.UserRepository;
-import com.hd.vbookstore.domain.Book;
 import com.hd.vbookstore.domain.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,50 +62,6 @@ public class ApplicationConfigurations {
 
         return authProvider;
     }
-
-    @Bean
-    public BookMapper bookMapper() {
-
-        return new BookMapper() {
-            @Override
-            public BookDto bookDtoFromBook(Book book) {
-                if (book == null) return null;
-
-                BookDto bookDto = new BookDto();
-                bookDto.setId(book.getId());
-                bookDto.setTitle(book.getTitle());
-                bookDto.setGenre(book.getGenre());
-                bookDto.setLanguage(book.getLanguage());
-                bookDto.setISBN(book.getISBN());
-                bookDto.setAuthor(book.getAuthor());
-                bookDto.setPublishDate(book.getPublishDate());
-                bookDto.setCount(book.getCount());
-                bookDto.setPrice(book.getPrice());
-
-                return bookDto;
-            }
-
-            @Override
-            public Book bookFromBookDto(BookDto bookDto) {
-                if (bookDto == null) return null;
-
-                return new Book(
-                        bookDto.getId(),
-                        bookDto.getTitle(),
-                        bookDto.getGenre(),
-                        bookDto.getLanguage(),
-                        bookDto.getISBN(),
-                        bookDto.getAuthor(),
-                        bookDto.getPublishDate(),
-                        bookDto.getCount(),
-                        bookDto.getPrice(),
-                        null,
-                        null
-                );
-            }
-        };
-    }
-
 
     @ControllerAdvice
     public class GlobalExceptionHandler {

@@ -2,19 +2,17 @@ package com.hd.vbookstore.commons;
 
 
 import com.hd.vbookstore.domain.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
 
 @Getter
 @Setter
-@NoArgsConstructor(force = true)
 @AllArgsConstructor
-public class UserDto {
+@ToString
+public class UserDto implements Serializable {
     private final String username;
     private final String fullname;
     private final String street;

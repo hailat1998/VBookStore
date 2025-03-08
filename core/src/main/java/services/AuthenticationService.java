@@ -7,6 +7,7 @@ import com.hd.vbookstore.core.utils.UserMapper;
 import com.hd.vbookstore.data.UserRepository;
 import com.hd.vbookstore.domain.enums.Role;
 import com.hd.vbookstore.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+
+@Slf4j
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
@@ -43,6 +46,8 @@ public class AuthenticationService {
 
     public UserDto signup(RegisterUserDto input) {
 
+        log.info("FROM AUTH   {}", input.getUsername());
+
         User user = new User(input.getUsername(),
                 passwordEncoder.encode(input.getPassword()),
                 input.getFullname(), input.getStreet(),
@@ -52,8 +57,12 @@ public class AuthenticationService {
                 input.getEmail());
 
         user.addRole(Role.ROLE_USER);
-
-        return userMapper.userToUserDto(userRepository.save(user));
+        User userNew = userRepository.save(user);
+        log.info("FROM AUTH {}", userNew.getUsername());
+        log.info("FROM AUTH {}", userNew.getPhoneNumber());
+        log.info("FROM AUTH {}", userNew.getCity());
+        log.info("FROM AUTH {}",userNew.getEmail());
+        return userMapper.userToUserDto(userNew);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

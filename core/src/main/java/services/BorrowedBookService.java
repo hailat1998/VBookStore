@@ -10,6 +10,7 @@ import com.hd.vbookstore.domain.Book;
 import com.hd.vbookstore.domain.BorrowedBook;
 import com.hd.vbookstore.domain.enums.BorrowStatus;
 import com.hd.vbookstore.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
+
+@Slf4j
 @Service
 @Transactional
 public class BorrowedBookService {
@@ -54,7 +57,6 @@ public class BorrowedBookService {
         }
 
         BorrowedBook borrowedBook = new BorrowedBook(
-                null,
                 user.get(),
                 book.get(),
                 startDate,
@@ -81,12 +83,24 @@ public class BorrowedBookService {
     }
 
     public BorrowedBookResponseDto updateBorrow(Long borrow_id, BorrowStatus status) {
-        Optional<BorrowedBook> borrowedBook = borrowedBookRepository.getBorrowById(borrow_id);
-        if (borrowedBook.isEmpty()) {
-            throw new NoDataFoundException("No active Books found");
-        }
-        borrowedBook.get().setStatus(status);
+        BorrowedBook borrowedBook = borrowedBookRepository.getBorrowById(borrow_id)
+                .orElseThrow(() -> new NoDataFoundException("No active Books found"));
 
-        return borrowedBookMapper.toDto(borrowedBookRepository.save(borrowedBook.get()));
+        if (status == BorrowStatus.RETURNED) {
+            Book book = bookRepository.getBookById(borrowedBook.getBook().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("No book found"));
+
+
+            book.setCount(book.getCount() + 1);
+            bookRepository.save(book);
+        }
+
+        borrowedBook.setStatus(status);
+        BorrowedBook updatedBorrow = borrowedBookRepository.save(borrowedBook);
+
+        log.info("FROM BORROWEDSERVICE - Book: {} ", updatedBorrow.getBook());
+        log.info("FROM BORROWEDSERVICE - User: {} ", updatedBorrow.getUser());
+
+        return borrowedBookMapper.toDto(updatedBorrow);
     }
 }

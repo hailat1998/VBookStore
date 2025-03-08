@@ -28,8 +28,8 @@ class BookCommandLineRunner(
     @Value("\${api.base-url:http://localhost:8080/api}") private val baseUrl: String // Better configuration
 ) : CommandLineRunner {
     companion object {
-        private const val INITIAL_DELAY = 10_000L
-        private const val BOOKS_OPERATION_DELAY = 5_000L
+        private const val INITIAL_DELAY = 2000L
+        private const val BOOKS_OPERATION_DELAY = 2000L
     }
 
     val bookUser = BookDto(
@@ -56,7 +56,7 @@ class BookCommandLineRunner(
         12.99f
     )
 
-    private lateinit var  savedBook: BookDto
+    private var  borrowedBookResponseDto: BorrowedBookResponseDto? = null
     
     private val logger = LoggerFactory.getLogger(BookCommandLineRunner::class.java)
     var  userToken: TokenResponse? = null
@@ -79,7 +79,7 @@ class BookCommandLineRunner(
     private suspend fun executeAuthenticationFlow(): Pair<TokenResponse?, TokenResponse?> {
         val user = createRegistrationDto()
         val registeredUser = registerUser(user)
-        logger.info("Registered user: ${registeredUser.body}")
+        logger.info("Registered user: ${registeredUser.body.toString()}")
 
         val userToken = loginUser("john_doe", "123456789")
         val adminToken = loginUser("admin", "1998@ht1234")
@@ -120,11 +120,11 @@ class BookCommandLineRunner(
 
             delay(BOOKS_OPERATION_DELAY)
 
-            val booksResponse = restClient.getBooks("$baseUrl/book/all")
-            logger.info("Books received: ${booksResponse.body?.content}")
+           // val booksResponse = restClient.getBooks("$baseUrl/book/all")
+         //   logger.info("Books received: ${booksResponse.body?.content}")
 
-            val searchResponse = restClient.searchBook("$baseUrl/book/search", "War")
-            logger.info("Search results: ${searchResponse.body?.content}")
+           // val searchResponse = restClient.searchBook("$baseUrl/book/search", "War")
+        //    logger.info("Search results: ${searchResponse.body?.content}")
 
             val authorCount = restClient.countByAuthor("$baseUrl/book/countByAuthor", "Leo Tolstoy")
             logger.info("${authorCount.body?.author} book count: ${authorCount.body?.bookCount}")
@@ -146,7 +146,6 @@ class BookCommandLineRunner(
     ) {
 
         val adminSavedBook = saveBook(adminToken, bookAdmin)
-        savedBook = adminSavedBook.getOrNull()?.body as BookDto
         logger.info("Admin Saved book: ${adminSavedBook.getOrNull()?.body}")
 
         val userSavedBook = saveBook(userToken, bookUser)
@@ -173,14 +172,15 @@ class BookCommandLineRunner(
         adminToken: TokenResponse?
     ) {
 
-        val setBorrow = setBorrow(userToken)
-        logger.info("User borrowed book: ${setBorrow.getOrNull()}")
 
-       val updateBorrow = updateBorrow(userToken)
+        borrowedBookResponseDto =  setBorrow(adminToken).getOrNull()
+        logger.info("User borrowed book: $borrowedBookResponseDto")
+
+       val updateBorrow = updateBorrow(adminToken)
         logger.info("User update borrow: ${updateBorrow.getOrNull()}")
     }
 
-    private suspend fun setBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto> {
+    private suspend fun setBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto?> {
         return runCatching {
             val calendar = Calendar.getInstance()
             val startDate = Date()
@@ -197,22 +197,20 @@ class BookCommandLineRunner(
 
             val borrowedBook = restClient.setBorrow(requestEntity)
 
-            borrowedBook.body ?: BorrowedBookResponseDto()
+            borrowedBook.body
         }
     }
 
-
-
-    private suspend fun updateBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto> {
+    private suspend fun updateBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto?> {
         return runCatching {
-            val updateBorrowDto = UpdateBorrowDto(savedBook.id, BorrowStatus.RETURNED)
+            val updateBorrowDto = UpdateBorrowDto(borrowedBookResponseDto?.id, BorrowStatus.RETURNED)
 
-            val requestEntity = RequestEntity.post(URI("$baseUrl/borrow/set"))
+            val requestEntity = RequestEntity.post(URI("$baseUrl/borrow/update"))
                 .withBearerToken(tokenResponse)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updateBorrowDto)
 
-            restClient.updateBorrow(requestEntity).body ?: BorrowedBookResponseDto()
+            restClient.updateBorrow(requestEntity).body
         }
     }
 

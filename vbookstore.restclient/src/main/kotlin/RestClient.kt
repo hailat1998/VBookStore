@@ -2,7 +2,6 @@ package com.hd.vbookstore.restclient
 
 import com.hd.vbookstore.commons.*
 import com.hd.vbookstore.domain.Book
-import com.hd.vbookstore.domain.BorrowedBook
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.core.ParameterizedTypeReference
@@ -52,7 +51,7 @@ class RestClient {
             rest.exchange(uri, HttpMethod.GET)
         }
 
-    suspend fun saveBook(uri: String, book: RequestEntity<BookDto>): ResponseEntity<Book> =
+    suspend fun saveBook(uri: String, book: RequestEntity<BookDto>): ResponseEntity<BookDto> =
         withContext(Dispatchers.IO) {
             rest.exchange(uri, HttpMethod.POST, book)
         }
