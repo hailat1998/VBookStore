@@ -82,9 +82,13 @@ class BookCommandLineRunner(
         logger.info("Registered user: ${registeredUser.body.toString()}")
 
         val userToken = loginUser("john_doe", "123456789")
+        logger.info("User logged in: {}", userToken.getOrNull()?.body)
+
         val adminToken = loginUser("admin", "1998@ht1234")
+        logger.info("Admin logged in: {}", adminToken.getOrNull()?.body)
 
         return Pair(userToken.getOrNull()?.body, adminToken.getOrNull()?.body)
+
     }
 
     private fun createRegistrationDto() = RegisterUserDto(
@@ -120,11 +124,11 @@ class BookCommandLineRunner(
 
             delay(BOOKS_OPERATION_DELAY)
 
-           // val booksResponse = restClient.getBooks("$baseUrl/book/all")
-         //   logger.info("Books received: ${booksResponse.body?.content}")
+            val booksResponse = restClient.getBooks("$baseUrl/book/all")
+            logger.info("Books received: ${booksResponse.body?.content}")
 
-           // val searchResponse = restClient.searchBook("$baseUrl/book/search", "War")
-        //    logger.info("Search results: ${searchResponse.body?.content}")
+            val searchResponse = restClient.searchBook("$baseUrl/book/search", "War")
+           logger.info("Search results: ${searchResponse.body?.content}")
 
             val authorCount = restClient.countByAuthor("$baseUrl/book/countByAuthor", "Leo Tolstoy")
             logger.info("${authorCount.body?.author} book count: ${authorCount.body?.bookCount}")
@@ -171,12 +175,10 @@ class BookCommandLineRunner(
         userToken: TokenResponse?,
         adminToken: TokenResponse?
     ) {
-
-
-        borrowedBookResponseDto =  setBorrow(adminToken).getOrNull()
+        borrowedBookResponseDto =  setBorrow(userToken).getOrNull()
         logger.info("User borrowed book: $borrowedBookResponseDto")
 
-       val updateBorrow = updateBorrow(adminToken)
+        val updateBorrow = updateBorrow(userToken)
         logger.info("User update borrow: ${updateBorrow.getOrNull()}")
     }
 

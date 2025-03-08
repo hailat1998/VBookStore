@@ -27,7 +27,7 @@ class RestClient {
        return rest.exchange(loginRequestEntity, TokenResponse::class.java)
     }
 
-    suspend fun getBooks(uri: String, page: Int = 0, size: Int = 10): ResponseEntity<RestPageImpl<Book>> =
+    suspend fun getBooks(uri: String, page: Int = 0, size: Int = 10): ResponseEntity<RestPageImpl<BookDto>> =
         withContext(Dispatchers.IO) {
             val myURI = URI(uri)
             val builder = UriComponentsBuilder.fromUri(myURI)
@@ -36,7 +36,7 @@ class RestClient {
                 .build()
                 .toUri()
 
-            val responseType = object : ParameterizedTypeReference<RestPageImpl<Book>>() {}
+            val responseType = object : ParameterizedTypeReference<RestPageImpl<BookDto>>() {}
 
             rest.exchange(
                 builder,

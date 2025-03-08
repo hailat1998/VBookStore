@@ -11,15 +11,16 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class UserDto implements Serializable {
-    private final String username;
-    private final String fullname;
-    private final String street;
-    private final String city;
-    private final String state;
-    private final String zip;
-    private final String phoneNumber;
-    private final String email;
-    private final Set<Role> roles;
+    private String username;
+    private String fullname;
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+    private String phoneNumber;
+    private String email;
+    private Set<Role> roles;
 }

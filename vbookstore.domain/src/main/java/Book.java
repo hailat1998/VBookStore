@@ -17,7 +17,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book implements Serializable {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

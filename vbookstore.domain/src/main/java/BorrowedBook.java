@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BorrowedBook implements Serializable {
+public class BorrowedBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

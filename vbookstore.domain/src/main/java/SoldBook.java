@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @RequiredArgsConstructor
 @Table(name = "sold_book")
-public class SoldBook implements Serializable {
+public class SoldBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

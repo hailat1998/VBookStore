@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // Changed from PRIVATE to PROTECTED
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "`user`")
-public class User implements UserDetails, Serializable {
+public class User implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
