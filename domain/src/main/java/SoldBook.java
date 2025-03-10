@@ -22,7 +22,7 @@ public class SoldBook {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
-    private final User user;
+    private final com.hd.vbookstore.domain.User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")

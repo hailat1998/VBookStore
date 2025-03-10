@@ -19,7 +19,6 @@ dependencies {
     implementation("org.hibernate:hibernate-core:6.6.5.Final")
     implementation("org.springframework.data:spring-data-commons:3.4.2")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.2")
-
 }
 
 tasks.test {

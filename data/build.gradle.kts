@@ -13,7 +13,7 @@ dependencies {
     implementation("org.springframework.data:spring-data-jpa:3.4.2")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation(project(":vbookstore.domain"))
+    implementation(project(":domain"))
     implementation(project(":commons"))
     implementation("org.springframework.boot:spring-boot-starter-data-rest:3.4.1")
     implementation("org.springframework.security:spring-security-core:6.4.2")

@@ -179,7 +179,11 @@ class BookCommandLineRunner(
         logger.info("User borrowed book: $borrowedBookResponseDto")
 
         val updateBorrow = updateBorrow(userToken)
-        logger.info("User update borrow: ${updateBorrow.getOrNull()}")
+        logger.info("User trying to update borrow: ${updateBorrow.getOrNull()}")
+
+        val updateBorrow2 = updateBorrow(adminToken)
+        logger.info("Admin trying to update borrow: ${updateBorrow2.getOrNull()}")
+
     }
 
     private suspend fun setBorrow(tokenResponse: TokenResponse?): Result<BorrowedBookResponseDto?> {
@@ -207,7 +211,7 @@ class BookCommandLineRunner(
         return runCatching {
             val updateBorrowDto = UpdateBorrowDto(borrowedBookResponseDto?.id, BorrowStatus.RETURNED)
 
-            val requestEntity = RequestEntity.post(URI("$baseUrl/borrow/update"))
+            val requestEntity = RequestEntity.put(URI("$baseUrl/borrow/update"))
                 .withBearerToken(tokenResponse)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updateBorrowDto)

@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/book/search", "/api/book/countByAuthor", "/api/book/all", "/api/book/countByAuthors").permitAll()
                         .requestMatchers("/api/book/save").hasRole("ADMIN")
+                        .requestMatchers("/api/borrow/update").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

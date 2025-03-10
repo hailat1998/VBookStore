@@ -1,4 +1,4 @@
-package com.hd.app.vbookstore;
+package com.hd.vbookstore.app;
 
 
 import org.springframework.boot.SpringApplication;

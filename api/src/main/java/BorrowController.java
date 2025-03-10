@@ -32,7 +32,7 @@ public class BorrowController {
         return Optional.ofNullable(borrowedBookService.setBorrow(borrowDto.getBook_id(), borrowDto.getStart_date(), borrowDto.getEnd_date()));
         }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public BorrowedBookResponseDto updateBorrow(@RequestBody UpdateBorrowDto updateBorrowDto) {
         log.info("FROM BORROWCONTROLLER {} ", updateBorrowDto.getBorrow_id().toString());
         return borrowedBookService.updateBorrow(updateBorrowDto.getBorrow_id(), updateBorrowDto.getStatus());

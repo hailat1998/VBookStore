@@ -1,4 +1,4 @@
-package com.hd.app.vbookstore;
+package com.hd.vbookstore.app;
 
 import com.hd.vbookstore.data.UserRepository;
 import com.hd.vbookstore.domain.enums.Role;
